@@ -74,8 +74,19 @@ fi
 
 # Make media files persistent
 if [ ! -d /data/media ]; then
-	_info "Moving media to persistent storage.."
-	mv /opt/netbox/netbox/media /data/
+    _info "Preparing persistent media storage.."
+
+    # Stelle sicher, dass /data existiert
+    mkdir -p /data
+
+    if [ -d /opt/netbox/netbox/media ]; then
+        _info "Moving existing media directory to persistent storage.."
+        # Verschiebe das Verzeichnis nach /data/media
+        mv /opt/netbox/netbox/media /data/media
+    else
+        _info "No existing media directory found in image, creating new /data/media.."
+        mkdir -p /data/media
+    fi
 fi
 
 # Is already symlink? --> netbox restarted (backup hooks)
